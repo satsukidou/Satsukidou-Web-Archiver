@@ -112,14 +112,21 @@ async def wait_for_images(page):
         pass
 
 
+def is_cached_pdf(out: Path, url: str) -> bool:
+    source_file = out.with_suffix(".url")
+    if not out.exists() or out.stat().st_size <= 10000 or not source_file.exists():
+        return False
+    return source_file.read_text(encoding="utf-8") == url
+
+
 async def save_month(page, year, month, base_url, monthly_dir):
     monthly_dir.mkdir(parents=True, exist_ok=True)
     out = monthly_dir / f"{year}-{month:02d}.pdf"
-    if out.exists() and out.stat().st_size > 10000:
+    url = base_url.format(year=year, month=month)
+    if is_cached_pdf(out, url):
         print(f"[skip] {year}-{month:02d} 既存PDFあり")
         return out
 
-    url = base_url.format(year=year, month=month)
     print(f"[open] {year}-{month:02d} {url}")
 
     await page.goto(url, wait_until="domcontentloaded", timeout=90000)
@@ -139,6 +146,7 @@ async def save_month(page, year, month, base_url, monthly_dir):
         },
         prefer_css_page_size=True,
     )
+    out.with_suffix(".url").write_text(url, encoding="utf-8")
     print(f"[saved] {out.name}  {out.stat().st_size / 1024 / 1024:.1f} MB")
     return out
 

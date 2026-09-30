@@ -1,9 +1,24 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from archive_web import build_targets, build_yearly_ranges
+from archive_web import build_targets, build_yearly_ranges, is_cached_pdf
 
 
 class ArchiveWebTests(unittest.TestCase):
+    def test_cached_pdf_is_reused_only_for_the_same_source_url(self):
+        with TemporaryDirectory() as temp_dir:
+            pdf = Path(temp_dir) / "2021-04.pdf"
+            pdf.write_bytes(b"x" * 10001)
+            source_file = pdf.with_suffix(".url")
+            source_file.write_text("https://example.com/umegaoka/2021/4", encoding="utf-8")
+
+            self.assertTrue(is_cached_pdf(pdf, "https://example.com/umegaoka/2021/4"))
+            self.assertFalse(is_cached_pdf(pdf, "https://example.com/ishikawa/2021/4"))
+
+            source_file.unlink()
+            self.assertFalse(is_cached_pdf(pdf, "https://example.com/umegaoka/2021/4"))
+
     def test_build_targets_uses_custom_year_and_month_window(self):
         self.assertEqual(
             build_targets(2022, 2023, start_month=5, end_month=6),
