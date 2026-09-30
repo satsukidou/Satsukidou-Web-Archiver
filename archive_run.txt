@@ -1,0 +1,77 @@
+[skip] 2021-04 既存PDFあり
+[skip] 2021-05 既存PDFあり
+[skip] 2021-06 既存PDFあり
+[skip] 2021-07 既存PDFあり
+[skip] 2021-08 既存PDFあり
+[open] 2021-09 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2021&blogMonth=9
+[saved] 2021-09.pdf  37.6 MB
+[open] 2021-10 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2021&blogMonth=10
+[saved] 2021-10.pdf  40.1 MB
+[open] 2021-11 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2021&blogMonth=11
+[saved] 2021-11.pdf  26.8 MB
+[open] 2021-12 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2021&blogMonth=12
+[saved] 2021-12.pdf  15.1 MB
+[open] 2022-01 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=1
+[saved] 2022-01.pdf  8.1 MB
+[open] 2022-02 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=2
+[saved] 2022-02.pdf  9.9 MB
+[open] 2022-03 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=3
+[saved] 2022-03.pdf  21.2 MB
+[open] 2022-04 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=4
+[saved] 2022-04.pdf  32.0 MB
+[open] 2022-05 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=5
+[saved] 2022-05.pdf  25.4 MB
+[open] 2022-06 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=6
+[saved] 2022-06.pdf  25.6 MB
+[open] 2022-07 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=7
+[saved] 2022-07.pdf  18.7 MB
+[open] 2022-08 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=8
+[saved] 2022-08.pdf  12.4 MB
+[open] 2022-09 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=9
+[saved] 2022-09.pdf  26.5 MB
+[open] 2022-10 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=10
+[saved] 2022-10.pdf  27.8 MB
+[open] 2022-11 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=11
+[saved] 2022-11.pdf  22.9 MB
+[open] 2022-12 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2022&blogMonth=12
+[saved] 2022-12.pdf  12.6 MB
+[open] 2023-01 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=1
+[saved] 2023-01.pdf  8.8 MB
+[open] 2023-02 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=2
+[saved] 2023-02.pdf  12.6 MB
+[open] 2023-03 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=3
+[saved] 2023-03.pdf  14.0 MB
+[open] 2023-04 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=4
+[saved] 2023-04.pdf  18.9 MB
+[open] 2023-05 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=5
+[saved] 2023-05.pdf  16.6 MB
+[open] 2023-06 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=6
+[saved] 2023-06.pdf  16.6 MB
+[open] 2023-07 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=7
+[saved] 2023-07.pdf  9.1 MB
+[open] 2023-08 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=8
+[saved] 2023-08.pdf  3.5 MB
+[open] 2023-09 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=9
+[saved] 2023-09.pdf  12.8 MB
+[open] 2023-10 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=10
+[saved] 2023-10.pdf  15.5 MB
+[open] 2023-11 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=11
+[saved] 2023-11.pdf  18.0 MB
+[open] 2023-12 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2023&blogMonth=12
+[saved] 2023-12.pdf  9.0 MB
+[open] 2024-01 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2024&blogMonth=1
+[saved] 2024-01.pdf  8.3 MB
+[open] 2024-02 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2024&blogMonth=2
+[saved] 2024-02.pdf  9.3 MB
+[open] 2024-03 https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear=2024&blogMonth=3
+[saved] 2024-03.pdf  12.1 MB
+[merge] 2021-04_2022-03.pdf
+[done] 2021-04_2022-03.pdf  138 pages  175.3 MB
+[merge] 2022-04_2023-03.pdf
+[done] 2022-04_2023-03.pdf  225 pages  240.2 MB
+[merge] 2023-04_2024-03.pdf
+[done] 2023-04_2024-03.pdf  205 pages  150.5 MB
+
+完了しました。
+年度別PDFは次のフォルダです:
+/Users/toyomasa/Documents/Satsukidou-Web-Archiver/output/yearly
