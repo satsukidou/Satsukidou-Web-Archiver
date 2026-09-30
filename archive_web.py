@@ -23,7 +23,7 @@ from pathlib import Path
 from pypdf import PdfReader, PdfWriter
 from playwright.async_api import async_playwright
 
-DEFAULT_BASE_URL = "https://www.magokoro.ed.jp/isikawa-e/viewer/blog.html?blogYear={year}&blogMonth={month}"
+DEFAULT_BASE_URL = "https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear={year}&blogMonth={month}"
 
 
 def build_targets(start_year: int, end_year: int, start_month: int = 1, end_month: int = 12):
