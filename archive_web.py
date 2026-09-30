@@ -18,6 +18,7 @@ import argparse
 import asyncio
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 from pypdf import PdfReader, PdfWriter
@@ -113,10 +114,28 @@ async def wait_for_images(page):
 
 
 def is_cached_pdf(out: Path, url: str) -> bool:
-    source_file = out.with_suffix(".url")
-    if not out.exists() or out.stat().st_size <= 10000 or not source_file.exists():
+    if not out.exists() or out.stat().st_size <= 10000:
         return False
-    return source_file.read_text(encoding="utf-8") == url
+    try:
+        metadata = PdfReader(str(out)).metadata
+    except Exception:
+        return False
+    return metadata is not None and metadata.get("/SourceURL") == url
+
+
+def write_pdf_source(out: Path, url: str) -> None:
+    reader = PdfReader(str(out))
+    writer = PdfWriter()
+    writer.clone_document_from_reader(reader)
+    writer.add_metadata({"/SourceURL": url})
+
+    with tempfile.NamedTemporaryFile(dir=out.parent, suffix=".pdf", delete=False) as temp_file:
+        temp_path = Path(temp_file.name)
+    try:
+        writer.write(str(temp_path))
+        os.replace(temp_path, out)
+    finally:
+        temp_path.unlink(missing_ok=True)
 
 
 async def save_month(page, year, month, base_url, monthly_dir):
@@ -146,7 +165,7 @@ async def save_month(page, year, month, base_url, monthly_dir):
         },
         prefer_css_page_size=True,
     )
-    out.with_suffix(".url").write_text(url, encoding="utf-8")
+    write_pdf_source(out, url)
     print(f"[saved] {out.name}  {out.stat().st_size / 1024 / 1024:.1f} MB")
     return out
 

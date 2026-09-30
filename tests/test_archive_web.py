@@ -2,22 +2,26 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from archive_web import build_targets, build_yearly_ranges, is_cached_pdf
+from pypdf import PdfWriter
+
+from archive_web import build_targets, build_yearly_ranges, is_cached_pdf, write_pdf_source
 
 
 class ArchiveWebTests(unittest.TestCase):
     def test_cached_pdf_is_reused_only_for_the_same_source_url(self):
         with TemporaryDirectory() as temp_dir:
             pdf = Path(temp_dir) / "2021-04.pdf"
-            pdf.write_bytes(b"x" * 10001)
-            source_file = pdf.with_suffix(".url")
-            source_file.write_text("https://example.com/umegaoka/2021/4", encoding="utf-8")
+            writer = PdfWriter()
+            writer.add_blank_page(width=100, height=100)
+            writer.add_metadata({"/Title": "test" * 3000})
+            with pdf.open("wb") as stream:
+                writer.write(stream)
+            url = "https://example.com/umegaoka/2021/4"
+            write_pdf_source(pdf, url)
 
-            self.assertTrue(is_cached_pdf(pdf, "https://example.com/umegaoka/2021/4"))
+            self.assertTrue(is_cached_pdf(pdf, url))
             self.assertFalse(is_cached_pdf(pdf, "https://example.com/ishikawa/2021/4"))
-
-            source_file.unlink()
-            self.assertFalse(is_cached_pdf(pdf, "https://example.com/umegaoka/2021/4"))
+            self.assertFalse(pdf.with_suffix(".url").exists())
 
     def test_build_targets_uses_custom_year_and_month_window(self):
         self.assertEqual(
