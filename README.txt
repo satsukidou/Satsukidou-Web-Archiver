@@ -29,6 +29,22 @@ Windowsでの使い方
 - Python 3
 - インターネット接続
 
+Macでの使い方
+-------------
+1. ZIPを展開します。
+2. Python 3をインストールします: https://www.python.org/downloads/macos/
+3. 「run_mac.command」をダブルクリックします。
+4. 初回のみ仮想環境、必要なPythonライブラリ、Playwright用Chromiumを自動で準備します。
+5. 完了すると output/yearly がFinderで開きます。
+
+macOSの「開発元を確認できない」警告が表示された場合は、ファイルをControlキーを押しながらクリックして「開く」を選択してください。
+
+必要なもの (Mac)
+----------------
+- macOS
+- Python 3
+- インターネット接続
+
 保存元を変えるとき
 ------------------
 `archive_web.py` を次のように実行してください。

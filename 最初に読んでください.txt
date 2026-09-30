@@ -2,22 +2,19 @@
 
 最初に実行するファイル
 ======================
-START_HERE.cmd
+Windows: START_HERE.cmd または run_windows.bat
+Mac:     run_mac.command
 
-今回の修正版では、黒い画面が勝手に閉じないようにしました。
-開始直後に必ず PAUSE します。
+Macでは初回起動時に、プロジェクト内に専用のPython仮想環境を作成し、必要なライブラリとChromiumを準備します。
 
-もし失敗した場合でも、同じフォルダに
-  archive_log.txt
-  archive_run.txt
-のどちらかが残ります。
+失敗した場合は、同じフォルダに作成される archive_log.txt または archive_run.txt を確認してください。
 
 そのファイルをChatGPTに送ってください。
 原因を特定できます。
 
 重要
 ====
-ZIPの中から直接 START_HERE.cmd を実行せず、
+ZIPの中から直接起動ファイルを実行せず、
 必ずZIPを右クリック →「すべて展開」してから実行してください。
 
-Pythonが未インストールの場合は、その旨を画面に表示して停止します。
+Python 3が未インストールの場合は、python.orgからインストールしてください。

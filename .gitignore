@@ -1,4 +1,5 @@
 output/
+.venv/
 *.pdf
 archive_log.txt
 archive_run.txt
