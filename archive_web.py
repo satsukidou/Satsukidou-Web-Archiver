@@ -196,7 +196,7 @@ def merge_yearly(output_dir: Path, yearly_ranges):
         print(f"[merge] {output.name}")
         writer = PdfWriter()
         missing = []
-        for year, month in months:
+        for year, month in sorted(months):
             src = output_dir / "monthly" / f"{year}-{month:02d}.pdf"
             if not src.exists():
                 missing.append(src.name)

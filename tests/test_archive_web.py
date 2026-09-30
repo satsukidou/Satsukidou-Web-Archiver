@@ -2,9 +2,9 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from pypdf import PdfWriter
+from pypdf import PdfReader, PdfWriter
 
-from archive_web import build_targets, build_yearly_ranges, is_cached_pdf, normalize_base_url, write_pdf_source
+from archive_web import build_targets, build_yearly_ranges, is_cached_pdf, merge_yearly, normalize_base_url, write_pdf_source
 
 
 class ArchiveWebTests(unittest.TestCase):
@@ -47,6 +47,30 @@ class ArchiveWebTests(unittest.TestCase):
                 ("2023-04_2024-03", [(2023, 4), (2023, 5), (2023, 6), (2023, 7), (2023, 8), (2023, 9), (2023, 10), (2023, 11), (2023, 12), (2024, 1), (2024, 2), (2024, 3)]),
             ],
         )
+
+    def test_merge_yearly_sorts_months_chronologically(self):
+        with TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir)
+            monthly_dir = output_dir / "monthly"
+            monthly_dir.mkdir()
+            months = [(2022, 3), (2021, 11), (2022, 1), (2021, 4), (2021, 12),
+                      (2022, 2), (2021, 7), (2021, 5), (2021, 10), (2021, 6),
+                      (2021, 9), (2021, 8)]
+
+            for year, month in months:
+                writer = PdfWriter()
+                page_width = (year - 2021) * 12 + month
+                writer.add_blank_page(width=page_width, height=100)
+                with (monthly_dir / f"{year}-{month:02d}.pdf").open("wb") as stream:
+                    writer.write(stream)
+
+            merge_yearly(output_dir, [("fiscal-year", months)])
+            merged = PdfReader(str(output_dir / "yearly" / "fiscal-year.pdf"))
+
+            self.assertEqual(
+                [float(page.mediabox.width) for page in merged.pages],
+                list(range(4, 16)),
+            )
 
 
 if __name__ == "__main__":
