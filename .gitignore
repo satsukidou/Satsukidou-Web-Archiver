@@ -1,0 +1,5 @@
+output/
+*.pdf
+archive_log.txt
+archive_run.txt
+__pycache__/
