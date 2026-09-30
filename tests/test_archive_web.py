@@ -4,10 +4,19 @@ from tempfile import TemporaryDirectory
 
 from pypdf import PdfWriter
 
-from archive_web import build_targets, build_yearly_ranges, is_cached_pdf, write_pdf_source
+from archive_web import build_targets, build_yearly_ranges, is_cached_pdf, normalize_base_url, write_pdf_source
 
 
 class ArchiveWebTests(unittest.TestCase):
+    def test_normalize_base_url_replaces_year_and_month_from_pasted_link(self):
+        pasted_url = "https://www.magokoro.ed.jp/isikawa-e/viewer/blog.html?blogYear=2019&blogMonth=4"
+        template = normalize_base_url(pasted_url)
+
+        self.assertEqual(
+            template.format(year=2021, month=5),
+            "https://www.magokoro.ed.jp/isikawa-e/viewer/blog.html?blogYear=2021&blogMonth=5",
+        )
+
     def test_cached_pdf_is_reused_only_for_the_same_source_url(self):
         with TemporaryDirectory() as temp_dir:
             pdf = Path(temp_dir) / "2021-04.pdf"

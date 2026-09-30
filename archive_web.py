@@ -20,11 +20,28 @@ import os
 import sys
 import tempfile
 from pathlib import Path
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 
 from pypdf import PdfReader, PdfWriter
 from playwright.async_api import async_playwright
 
 DEFAULT_BASE_URL = "https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear={year}&blogMonth={month}"
+
+
+def normalize_base_url(base_url: str) -> str:
+    parts = urlsplit(base_url)
+    replacements = {
+        "year": "{year}",
+        "blogYear": "{year}",
+        "month": "{month}",
+        "blogMonth": "{month}",
+    }
+    query = [
+        (key, replacements.get(key, value))
+        for key, value in parse_qsl(parts.query, keep_blank_values=True)
+    ]
+    encoded_query = urlencode(query, doseq=True, quote_via=quote, safe="{}")
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, encoded_query, parts.fragment))
 
 
 def build_targets(start_year: int, end_year: int, start_month: int = 1, end_month: int = 12):
@@ -208,6 +225,7 @@ async def main():
     parser.add_argument("--fiscal-end-month", type=int, default=3)
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent / "output")
     args = parser.parse_args()
+    args.base_url = normalize_base_url(args.base_url)
 
     out_dir = args.output_dir.resolve()
     monthly_dir = out_dir / "monthly"

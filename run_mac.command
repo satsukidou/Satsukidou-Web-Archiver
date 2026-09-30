@@ -13,7 +13,7 @@ printf "Web Blog PDF Archive (macOS)\n"
 printf "保存するURLと期間を設定できます。空欄は [] 内の既定値を使います。\n"
 printf "============================================\n\n"
 
-read -r -p "URLテンプレート [https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear={year}&blogMonth={month}]: " BASE_URL
+read -r -p "ブログURL（例URLをそのまま貼れます） [https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear={year}&blogMonth={month}]: " BASE_URL
 BASE_URL=${BASE_URL:-"https://www.magokoro.ed.jp/umegaoka-e/viewer/blog.html?blogYear={year}&blogMonth={month}"}
 read -r -p "開始年 [2021]: " START_YEAR
 START_YEAR=${START_YEAR:-2021}
