@@ -3,8 +3,8 @@ setlocal
 cd /d "%~dp0"
 
 echo ==================================================
-echo Ishikawa Elementary School Blog PDF Archive
-echo 2021-04 to 2024-03
+echo Web Blog PDF Archive
+echo Default range: 2021-04 to 2024-03
 echo ==================================================
 echo.
 echo This window will stay open so errors can be checked.
@@ -49,10 +49,10 @@ echo Step 2/3: Installing Chromium for Playwright...
 if errorlevel 1 goto :FAIL
 
 echo.
-echo Step 3/3: Creating monthly PDFs and 3 yearly PDFs...
+echo Step 3/3: Creating monthly PDFs and yearly PDF bundles...
 echo This can take a while. Please keep this window open.
 echo.
-%PYEXE% archive_ishikawa.py 2>&1 | powershell -NoProfile -Command "$input | Tee-Object -FilePath archive_run.txt"
+%PYEXE% archive_web.py 2>&1 | powershell -NoProfile -Command "$input | Tee-Object -FilePath archive_run.txt"
 set "RC=%ERRORLEVEL%"
 
 if not "%RC%"=="0" goto :FAILRUN

@@ -3,8 +3,8 @@ chcp 65001 >nul
 cd /d "%~dp0"
 
 echo ============================================
-echo 石川小学校 ブログ保存PDF作成
-echo 2021年4月 - 2024年3月
+echo Web Blog PDF Archive
+echo 2021年4月 - 2024年3月 (デフォルト設定)
 echo ============================================
 echo.
 
@@ -26,10 +26,10 @@ py -m playwright install chromium
 if errorlevel 1 goto :err
 
 echo.
-echo 36か月分の保存を開始します。
+echo 保存対象のページを順番に開いてPDF化します。
 echo 途中で止めても、次回は完成済みの月をスキップします。
 echo.
-py archive_ishikawa.py
+py archive_web.py
 
 echo.
 echo 完了しました。
