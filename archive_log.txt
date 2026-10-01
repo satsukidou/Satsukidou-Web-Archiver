@@ -72,3 +72,17 @@ Downloading Winldd (playwright winldd v1007)[2m from https://cdn.playwright.dev
 |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  88% of 0.1 MiB
 |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0.1 MiB
 Winldd (playwright winldd v1007) downloaded to C:\Users\KP50\AppData\Local\ms-playwright\winldd-1007
+Requirement already satisfied: playwright in ./.venv/lib/python3.9/site-packages (1.60.0)
+Requirement already satisfied: pypdf in ./.venv/lib/python3.9/site-packages (6.19.0)
+Requirement already satisfied: greenlet<4.0.0,>=3.1.1 in ./.venv/lib/python3.9/site-packages (from playwright) (3.2.5)
+Requirement already satisfied: pyee<14,>=13 in ./.venv/lib/python3.9/site-packages (from playwright) (13.0.1)
+Requirement already satisfied: typing_extensions>=4.0 in ./.venv/lib/python3.9/site-packages (from pypdf) (4.16.0)
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/toyomasa/Documents/Satsukidou-Web-Archiver/.venv/bin/python -m pip install --upgrade pip' command.
+Requirement already satisfied: playwright in ./.venv/lib/python3.9/site-packages (1.60.0)
+Requirement already satisfied: pypdf in ./.venv/lib/python3.9/site-packages (6.19.0)
+Requirement already satisfied: greenlet<4.0.0,>=3.1.1 in ./.venv/lib/python3.9/site-packages (from playwright) (3.2.5)
+Requirement already satisfied: pyee<14,>=13 in ./.venv/lib/python3.9/site-packages (from playwright) (13.0.1)
+Requirement already satisfied: typing_extensions>=4.0 in ./.venv/lib/python3.9/site-packages (from pypdf) (4.16.0)
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/toyomasa/Documents/Satsukidou-Web-Archiver/.venv/bin/python -m pip install --upgrade pip' command.

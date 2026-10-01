@@ -1,9 +1,45 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from archive_web import DEFAULT_BASE_URL, build_targets, build_yearly_ranges, normalize_base_url
+from pypdf import PdfReader, PdfWriter
+
+from archive_web import (
+    DEFAULT_BASE_URL,
+    build_targets,
+    build_yearly_ranges,
+    is_cached_pdf,
+    merge_yearly,
+    normalize_base_url,
+    write_pdf_source,
+)
 
 
 class ArchiveWebTests(unittest.TestCase):
+    def test_normalize_base_url_replaces_year_and_month_from_pasted_link(self):
+        pasted_url = "https://www.magokoro.ed.jp/isikawa-e/viewer/blog.html?blogYear=2019&blogMonth=4"
+        template = normalize_base_url(pasted_url)
+
+        self.assertEqual(
+            template.format(year=2021, month=5),
+            "https://www.magokoro.ed.jp/isikawa-e/viewer/blog.html?blogYear=2021&blogMonth=5",
+        )
+
+    def test_cached_pdf_is_reused_only_for_the_same_source_url(self):
+        with TemporaryDirectory() as temp_dir:
+            pdf = Path(temp_dir) / "2021-04.pdf"
+            writer = PdfWriter()
+            writer.add_blank_page(width=100, height=100)
+            writer.add_metadata({"/Title": "test" * 3000})
+            with pdf.open("wb") as stream:
+                writer.write(stream)
+            url = "https://example.com/umegaoka/2021/4"
+            write_pdf_source(pdf, url)
+
+            self.assertTrue(is_cached_pdf(pdf, url))
+            self.assertFalse(is_cached_pdf(pdf, "https://example.com/ishikawa/2021/4"))
+            self.assertFalse(pdf.with_suffix(".url").exists())
+
     def test_build_targets_uses_custom_year_and_month_window(self):
         self.assertEqual(
             build_targets(2022, 2023, start_month=5, end_month=6),
@@ -34,6 +70,30 @@ class ArchiveWebTests(unittest.TestCase):
             normalize_base_url("https://example.com/viewer/blog.html?blogYear=2024&blogMonth=5"),
             "https://example.com/viewer/blog.html?blogYear={year}&blogMonth={month}",
         )
+
+    def test_merge_yearly_sorts_months_chronologically(self):
+        with TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir)
+            monthly_dir = output_dir / "monthly"
+            monthly_dir.mkdir()
+            months = [(2022, 3), (2021, 11), (2022, 1), (2021, 4), (2021, 12),
+                      (2022, 2), (2021, 7), (2021, 5), (2021, 10), (2021, 6),
+                      (2021, 9), (2021, 8)]
+
+            for year, month in months:
+                writer = PdfWriter()
+                page_width = (year - 2021) * 12 + month
+                writer.add_blank_page(width=page_width, height=100)
+                with (monthly_dir / f"{year}-{month:02d}.pdf").open("wb") as stream:
+                    writer.write(stream)
+
+            merge_yearly(output_dir, [("fiscal-year", months)])
+            merged = PdfReader(str(output_dir / "yearly" / "fiscal-year.pdf"))
+
+            self.assertEqual(
+                [float(page.mediabox.width) for page in merged.pages],
+                list(range(4, 16)),
+            )
 
 
 if __name__ == "__main__":

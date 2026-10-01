@@ -26,6 +26,7 @@ import asyncio
 import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import parse_qsl, quote, urlparse, urlunparse
 
@@ -36,7 +37,7 @@ DEFAULT_BASE_URL = "https://example.com/blog.html?year={year}&month={month}"
 
 
 def normalize_base_url(base_url: str) -> str:
-    """Example URL with a current year/month is converted to the `{year}` / `{month}` template."""
+    """Convert a real month page URL into the `{year}` / `{month}` template form."""
     if "{year}" in base_url or "{month}" in base_url:
         return base_url
 
@@ -153,14 +154,39 @@ async def wait_for_images(page):
         pass
 
 
+def is_cached_pdf(out: Path, url: str) -> bool:
+    if not out.exists() or out.stat().st_size <= 10000:
+        return False
+    try:
+        metadata = PdfReader(str(out)).metadata
+    except Exception:
+        return False
+    return metadata is not None and metadata.get("/SourceURL") == url
+
+
+def write_pdf_source(out: Path, url: str) -> None:
+    reader = PdfReader(str(out))
+    writer = PdfWriter()
+    writer.clone_document_from_reader(reader)
+    writer.add_metadata({"/SourceURL": url})
+
+    with tempfile.NamedTemporaryFile(dir=out.parent, suffix=".pdf", delete=False) as temp_file:
+        temp_path = Path(temp_file.name)
+    try:
+        writer.write(str(temp_path))
+        os.replace(temp_path, out)
+    finally:
+        temp_path.unlink(missing_ok=True)
+
+
 async def save_month(page, year, month, base_url, monthly_dir):
     monthly_dir.mkdir(parents=True, exist_ok=True)
     out = monthly_dir / f"{year}-{month:02d}.pdf"
-    if out.exists() and out.stat().st_size > 10000:
+    url = base_url.format(year=year, month=month)
+    if is_cached_pdf(out, url):
         print(f"[skip] {year}-{month:02d} 既存PDFあり")
         return out
 
-    url = base_url.format(year=year, month=month)
     print(f"[open] {year}-{month:02d} {url}")
 
     await page.goto(url, wait_until="domcontentloaded", timeout=90000)
@@ -180,6 +206,7 @@ async def save_month(page, year, month, base_url, monthly_dir):
         },
         prefer_css_page_size=True,
     )
+    write_pdf_source(out, url)
     print(f"[saved] {out.name}  {out.stat().st_size / 1024 / 1024:.1f} MB")
     return out
 
@@ -193,7 +220,7 @@ def merge_yearly(output_dir: Path, yearly_ranges):
         print(f"[merge] {output.name}")
         writer = PdfWriter()
         missing = []
-        for year, month in months:
+        for year, month in sorted(months):
             src = output_dir / "monthly" / f"{year}-{month:02d}.pdf"
             if not src.exists():
                 missing.append(src.name)
@@ -226,7 +253,6 @@ async def main():
     parser.add_argument("--fiscal-end-month", type=int, default=3)
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent / "output")
     args = parser.parse_args()
-
     args.base_url = normalize_base_url(args.base_url)
 
     out_dir = args.output_dir.resolve()

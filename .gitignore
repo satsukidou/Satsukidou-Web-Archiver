@@ -1,5 +1,9 @@
 output/
+.venv/
 *.pdf
 archive_log.txt
 archive_run.txt
 __pycache__/
+archive_run.txt
+archive_log.txt
+archive_run.txt
