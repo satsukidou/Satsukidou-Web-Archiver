@@ -2,10 +2,17 @@
 """
 汎用のブログ/サイト月次PDFアーカイブスクリプト。
 
-既定値は旧来の石川小学校ブログに合わせていますが、以下の引数で汎用に使えます。
+既定値は匿名の例示URLですが、以下の引数で任意のサイトに合わせて使えます。
 
   python archive_web.py --base-url "https://example.com/blog.html?year={year}&month={month}" \
       --start-year 2021 --end-year 2024 --fiscal-start-month 4 --fiscal-end-month 3
+
+使い方のコツ:
+  - ブラウザで月別ページのURLを開き、そのアドレスバーの内容をコピーする
+  - 変わる年/月の部分だけを {year} / {month} に置き換える
+  - 例: https://example.com/archive?year=2024&month=5
+        -> https://example.com/archive?year={year}&month={month}
+  - 「サイトのトップページ」ではなく、「月ごとに変わるページURL」を使う
 
 保存先:
   output/monthly/2021-04.pdf ...
@@ -17,13 +24,47 @@ from __future__ import annotations
 import argparse
 import asyncio
 import os
+import re
 import sys
 from pathlib import Path
+from urllib.parse import parse_qsl, quote, urlparse, urlunparse
 
 from pypdf import PdfReader, PdfWriter
 from playwright.async_api import async_playwright
 
-DEFAULT_BASE_URL = "https://www.magokoro.ed.jp/isikawa-e/viewer/blog.html?blogYear={year}&blogMonth={month}"
+DEFAULT_BASE_URL = "https://example.com/blog.html?year={year}&month={month}"
+
+
+def normalize_base_url(base_url: str) -> str:
+    """Example URL with a current year/month is converted to the `{year}` / `{month}` template."""
+    if "{year}" in base_url or "{month}" in base_url:
+        return base_url
+
+    parts = urlparse(base_url)
+    query_pairs = parse_qsl(parts.query, keep_blank_values=True)
+    if not query_pairs:
+        return base_url
+
+    replaced = []
+    changed = False
+    for key, value in query_pairs:
+        lowered = key.lower()
+        if lowered in {"year", "blogyear", "y", "yyyy"} and re.fullmatch(r"\d{4}", value):
+            replaced.append((key, "{year}"))
+            changed = True
+        elif lowered in {"month", "blogmonth", "m"} and re.fullmatch(r"\d{1,2}", value):
+            replaced.append((key, "{month}"))
+            changed = True
+        else:
+            replaced.append((key, value))
+
+    if changed:
+        encoded_pairs = "&".join(
+            f"{quote(key, safe='')}={quote(value, safe='{}')}" for key, value in replaced
+        )
+        return urlunparse(parts._replace(query=encoded_pairs))
+
+    return base_url
 
 
 def build_targets(start_year: int, end_year: int, start_month: int = 1, end_month: int = 12):
@@ -174,13 +215,19 @@ def merge_yearly(output_dir: Path, yearly_ranges):
 
 async def main():
     parser = argparse.ArgumentParser(description="Web blog/monthly page archive to PDF.")
-    parser.add_argument("--base-url", default=os.environ.get("BLOG_BASE_URL", DEFAULT_BASE_URL), help="URL template with {year} and {month} placeholders.")
+    parser.add_argument(
+        "--base-url",
+        default=os.environ.get("BLOG_BASE_URL", DEFAULT_BASE_URL),
+        help="URL template with {year} and {month} placeholders, or an example URL such as https://example.com/archive?year=2024&month=5.",
+    )
     parser.add_argument("--start-year", type=int, default=2021)
     parser.add_argument("--end-year", type=int, default=2024)
     parser.add_argument("--fiscal-start-month", type=int, default=4)
     parser.add_argument("--fiscal-end-month", type=int, default=3)
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent / "output")
     args = parser.parse_args()
+
+    args.base_url = normalize_base_url(args.base_url)
 
     out_dir = args.output_dir.resolve()
     monthly_dir = out_dir / "monthly"
